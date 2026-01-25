@@ -12,3 +12,6 @@
 - cho 1 ví dụ đặt tên route và gọi route qua tên
 - "/sinhvien/{name}/{mssv}": trả về thông tin giới thiệu của sinh viên làm bài, name mặc định "Luong Xuan Hieu", mssv Mặc định "123456"
 - "/banco"/{n}": trả về view banco hiển thị bàn cờ vua kích thước n*n
+
+22/1/2026
+Đăng nhập, đăng kí

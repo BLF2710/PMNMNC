@@ -8,36 +8,17 @@
 </head>
 <body>
     <table>
-        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+        <tr>
+        @foreach ( $products as $product )
             <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Price</th>
-            </tr>
-        </thead>
-        <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>apple</td>
-                    <td>1.00$</td>
-                </tr>
-                                <tr>
-                    <td>2</td>
-                    <td>orange</td>
-                    <td>2.00$</td>
-                </tr>
-                                <tr>
-                    <td>3</td>
-                    <td>3nana</td>
-                    <td>3.00$</td>
-                </tr>
-                                </tr>
-                                <tr>
-                    <td>4</td>
-                    <td>watermelon</td>
-                    <td>10.00$</td>
-                </tr>
-        </tbody>
+                <td>{{ $product['id'] }}</td>
+                <td>{{ $product['name'] }}</td>
+                <td>{{ $product['price'] }}</td>        
+        @endforeach
     </table>
         <a href="{{ route('add') }}">Add New Product</a>
 </body>
