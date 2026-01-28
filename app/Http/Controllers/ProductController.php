@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Middleware\CheckTimeAccess;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
 
-class ProductController extends Controller
+class ProductController extends Controller implements HasMiddleware
 {
     public function index()
     {
@@ -70,4 +72,23 @@ class ProductController extends Controller
         ]);
     }
 
+    public static function middleware ()
+    {
+        return [
+            CheckTimeAccess::class,
+        ];
+    }
+
+    public function age(){
+        return view ('product.age');
+    }
+
+    public function checkAge(Request $request)
+    {
+        session([
+            'age_verified' => true,
+            'age' => $request->age
+        ]);
+        return redirect('/product');
+    }
 }

@@ -24,6 +24,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\TestController;
+use App\Http\Middleware\CheckSessionAge;
+use App\Http\Middleware\CheckTimeAccess;
+use App\Http\Middleware\CheckAge;
 
 Route::get('/', function () {
     return view('hello');
@@ -41,14 +45,23 @@ Route::get('/register', function(){
 Route::prefix('product')->group(function () {
     Route::controller(ProductController::class)->group(function()
     {
-        Route::get('/', 'index');
-        Route::get('/add', 'create')->name('add');
-        Route::get('/detail/{id?}','get');
-        Route::get('/store', 'store');
+        Route::get('/', 'index') -> middleware(CheckTimeAccess::class);
         Route::post('/checkLogin', 'checkLogin');
         Route::post('/registerRequest', 'registerRequest');
+        Route::get('/age', 'age') -> name('product.age');
+        Route::post('/checkAge', 'checkAge')->middleware(CheckAge::class); 
+
+        Route::middleware(CheckSessionAge::class)->group(function(){
+            Route::controller(ProductController::class)->group(function(){
+            Route::get('/add', 'create')->name('add') -> middleware(CheckTimeAccess::class);
+            Route::get('/detail/{id?}','get') -> middleware(CheckTimeAccess::class);
+            Route::get('/detail/{id?}','get') -> middleware(CheckTimeAccess::class);
+            });
+        });
+
     });
 });
+
 
 route::get('/sinhvien/{name?}/{mssv?}', function($name='Luong Xuan Hieu', $mssv='123456'){
     return view('sinhvien.gioithieu', ['name' => $name], ['mssv' => $mssv]);
@@ -57,6 +70,8 @@ route::get('/sinhvien/{name?}/{mssv?}', function($name='Luong Xuan Hieu', $mssv=
 route::get('/banco/{n?}', function($n=5){
     return view ('banco.ban', ['n' => $n]);
 });
+
+route::resource('test', TestController::class);
 
 route::fallback(function (){
     return view('error.404');
