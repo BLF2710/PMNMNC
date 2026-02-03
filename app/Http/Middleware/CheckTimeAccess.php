@@ -16,17 +16,18 @@ class CheckTimeAccess
      */
     public function handle(Request $request, Closure $next): Response
     {   
-        $now = now();
-        $start = Carbon::parse('07:00:00');
-        $end = Carbon::parse('16:00:00');
-        if($now->between($start, $end)){
-            return $next($request);
-        }
-        else{
-        return response()->json([
-            'message' => 'Access denied',
-            'time' => $now->format('H:i:s')
-        ], 403);
-            }
+        // $now = now();
+        // $start = Carbon::parse('01:00:00');
+        // $end = Carbon::parse('23:00:00');
+        // if($now->between($start, $end)){
+        //     return $next($request);
+        // }
+        // else{
+        // return response()->json([
+        //     'message' => 'Access denied',
+        //     'time' => $now->format('H:i:s')
+        // ], 403);
+        //     }
+        return $next($request);
     }
 }

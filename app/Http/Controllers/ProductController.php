@@ -5,19 +5,23 @@ namespace App\Http\Controllers;
 use App\Http\Middleware\CheckTimeAccess;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
-
+use App\Models\Product;
 class ProductController extends Controller implements HasMiddleware
 {
     public function index()
     {
-        $title = "Product List";
-        return view("product.index", ['title' => $title,
-            'products'=>[
-                    ['id'=>1, 'name'=>'Orange', 'price'=>100],
-                    ['id'=>2, 'name'=>'Apple', 'price'=>200],
-                    ['id'=>3, 'name'=>'3nana', 'price'=>300],
-            ]  
-        ]); 
+        // $title = "Product List";
+        // return view("product.index", ['title' => $title,
+        //     'products'=>[
+        //             ['id'=>1, 'name'=>'Orange', 'price'=>100],
+        //             ['id'=>2, 'name'=>'Apple', 'price'=>200],
+        //             ['id'=>3, 'name'=>'3nana', 'price'=>300],
+        //     ]  
+        // ]); 
+
+            $product = Product::all();
+            $title = "Product.List";
+            return view("admin.product.index", ['products'=>$product, 'title'=>$title]);
     }
 
     public function get(string $id = "123")
@@ -27,31 +31,54 @@ class ProductController extends Controller implements HasMiddleware
 
     public function create()
     {
-        return view("product.add");
+        return view("admin.product.add");
     }
 
     public function store(Request $request)
     { 
-        return $request->all();
+        // return $request->all();
+
+        $product = new Product();
+        $product->name = $request->name;
+        $product->price = $request->price;
+        $product->stock = $request->stock;
+
+        $product->save();
+        return redirect('/products');
     }
 
-    public function login(){
-        return view("login");
-    }
+    // public function login(){
+    //     return view("login");
+    // }
 
-    public function checkLogin(Request $request)
+    // public function checkLogin(Request $request)
+    // {
+    //     if($request->input('username') == 'baodq' && $request->input('pass') == '123456')
+    //     {
+    //         return "Dang nhap thanh cong";
+    //     }
+    //     else
+    //     {
+    //         return "Dang nhap that bai";
+    //     }
+    // }
+
+
+    public function edit(string $id)
     {
-        if($request->input('username') == 'baodq' && $request->input('pass') == '123456')
-        {
-            return "Dang nhap thanh cong";
-        }
-        else
-        {
-            return "Dang nhap that bai";
-        }
+        $product = Product::find($id);
+        return view('product.edit', ['product' => $product]);
     }
 
+    public function update(Request $request, string $id)
+    {
+        $product = Product::find($id);
+        $product->name = $request->name;
+        $product->stock = $request->stock;
 
+        $product->save();
+        return redirect('/product');
+    }
     public function register()
     {
         return view("register");

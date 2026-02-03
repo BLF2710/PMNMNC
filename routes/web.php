@@ -28,37 +28,26 @@ use App\Http\Controllers\TestController;
 use App\Http\Middleware\CheckSessionAge;
 use App\Http\Middleware\CheckTimeAccess;
 use App\Http\Middleware\CheckAge;
+use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
     return view('hello');
 });
 
-Route::get('/login', function(){
-    return view ('login');
-});
+Route::get('/login', [AuthController::class, 'showlogin']);
+Route::post('/checklogin', [AuthController::class, 'checkLogin'])->name('checkLogin');
+
+
 
 Route::get('/register', function(){
     return view ('register');
 });
 
-
-Route::prefix('product')->group(function () {
-    Route::controller(ProductController::class)->group(function()
-    {
-        Route::get('/', 'index') -> middleware(CheckTimeAccess::class);
-        Route::post('/checkLogin', 'checkLogin');
-        Route::post('/registerRequest', 'registerRequest');
-        Route::get('/age', 'age') -> name('product.age');
-        Route::post('/checkAge', 'checkAge')->middleware(CheckAge::class); 
-
-        Route::middleware(CheckSessionAge::class)->group(function(){
-            Route::controller(ProductController::class)->group(function(){
-            Route::get('/add', 'create')->name('add') -> middleware(CheckTimeAccess::class);
-            Route::get('/detail/{id?}','get') -> middleware(CheckTimeAccess::class);
-            Route::get('/detail/{id?}','get') -> middleware(CheckTimeAccess::class);
-            });
-        });
-
+Route::prefix('products') -> group(function () {
+    Route::controller(ProductController::class)->group(function () {
+        Route::get('/', 'index');
+        Route::get('/add', 'create');
+        Route::post('/store', 'store');
     });
 });
 
@@ -71,7 +60,13 @@ route::get('/banco/{n?}', function($n=5){
     return view ('banco.ban', ['n' => $n]);
 });
 
-route::resource('test', TestController::class);
+
+
+route::get('/admin', function ()
+{
+    return view('layout.admin');
+});
+
 
 route::fallback(function (){
     return view('error.404');
