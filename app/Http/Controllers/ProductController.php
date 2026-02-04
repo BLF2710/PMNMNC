@@ -10,15 +10,6 @@ class ProductController extends Controller implements HasMiddleware
 {
     public function index()
     {
-        // $title = "Product List";
-        // return view("product.index", ['title' => $title,
-        //     'products'=>[
-        //             ['id'=>1, 'name'=>'Orange', 'price'=>100],
-        //             ['id'=>2, 'name'=>'Apple', 'price'=>200],
-        //             ['id'=>3, 'name'=>'3nana', 'price'=>300],
-        //     ]  
-        // ]); 
-
             $product = Product::all();
             $title = "Product.List";
             return view("admin.product.index", ['products'=>$product, 'title'=>$title]);
@@ -47,38 +38,47 @@ class ProductController extends Controller implements HasMiddleware
         return redirect('/products');
     }
 
-    // public function login(){
-    //     return view("login");
-    // }
-
-    // public function checkLogin(Request $request)
+    // public function edit(string $id)
     // {
-    //     if($request->input('username') == 'baodq' && $request->input('pass') == '123456')
-    //     {
-    //         return "Dang nhap thanh cong";
-    //     }
-    //     else
-    //     {
-    //         return "Dang nhap that bai";
-    //     }
+    //     $product = Product::find($id);
+    //     return view('product.edit', ['product' => $product]);
     // }
 
-
-    public function edit(string $id)
+     public function edit(string $id)
     {
-        $product = Product::find($id);
-        return view('product.edit', ['product' => $product]);
+        return view('admin.product.edit', ['product' => Product::find($id)]);
     }
 
     public function update(Request $request, string $id)
     {
+        //
         $product = Product::find($id);
-        $product->name = $request->name;
-        $product->stock = $request->stock;
+        $product -> name = $request -> input('name');
+        $product -> price = $request -> input('price');
+        $product -> stock = $request -> input('stock');
 
-        $product->save();
-        return redirect('/product');
+        $product -> save();
+
+        return redirect('/products');
     }
+
+    // public function update(Request $request, string $id)
+    // {
+    //     $product = Product::find($id);
+    //     $product->name = $request->name;
+    //     $product->stock = $request->stock;
+
+    //     $product->save();
+    //     return redirect('/product');
+    // }
+
+        public function delete(string $id)
+    {
+        $product = Product::find($id);
+        $product -> delete();
+        return redirect('/products');
+    }
+
     public function register()
     {
         return view("register");

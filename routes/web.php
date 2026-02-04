@@ -48,6 +48,9 @@ Route::prefix('products') -> group(function () {
         Route::get('/', 'index');
         Route::get('/add', 'create');
         Route::post('/store', 'store');
+        Route::get('/edit/{id?}', 'edit');
+        Route::post('/update/{id?}', 'update');
+        Route::post('/delete/{id?}', 'delete');
     });
 });
 
